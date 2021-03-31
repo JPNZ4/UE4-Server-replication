@@ -35,9 +35,9 @@ private:
 	// Force applied to car when throttle fully down (N)
 	UPROPERTY(EditAnywhere)
 		float MaxDrivingForce = 10000;
-	// Number of degrees rotated per second
+	// Full lock turning raidus (meters)
 	UPROPERTY(EditAnywhere)
-		float MaxDegreesPerSecond = 90;
+		float TurningRadius = 10;
 	// Air Coef
 	UPROPERTY(EditAnywhere)
 		float DragCoefficient = 16;
@@ -50,8 +50,11 @@ private:
 
 	FVector Velocity;
 
-	void MoveForward(float Value);
-	void MoveRight(float Value);
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_MoveForward(float Value);
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_MoveRight(float Value);
+
 	void ApplyRotation(float DeltaTime);
 	void UpdateLocationFromVelocity(float DeltaTime);
 	FVector GetAirResistance();
