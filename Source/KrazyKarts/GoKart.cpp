@@ -110,18 +110,18 @@ void AGoKart::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AGoKart::MoveForward(float Value)
 {
 	Throttle = Value;
-	Server_MoveForward_Implementation(Value);
+	Server_MoveForward(Value);
 }
 
 void AGoKart::MoveRight(float Value)
 {
 	SteeringThrow = Value;
+	Server_MoveRight(Value);
 }
 
 void AGoKart::Server_MoveForward_Implementation(float Value)
 {
 	Throttle = Value;
-	Server_MoveForward_Validate(Value);
 }
 
 bool AGoKart::Server_MoveForward_Validate(float Value)
