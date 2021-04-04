@@ -50,6 +50,12 @@ private:
 
 	FVector Velocity;
 
+	UPROPERTY(Replicated)
+		FVector ReplicatedLocation;
+	UPROPERTY(Replicated)
+		FRotator ReplicatedRotation;
+
+
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_MoveForward(float Value);
 	UFUNCTION(Server, Reliable, WithValidation)
