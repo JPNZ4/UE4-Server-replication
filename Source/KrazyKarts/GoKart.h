@@ -45,15 +45,19 @@ private:
 	UPROPERTY(EditAnywhere)
 		float RollingCoefficient = 0.02;
 
+	UPROPERTY(Replicated)
 	float Throttle;
+	UPROPERTY(Replicated)
 	float SteeringThrow;
 
+	UPROPERTY(Replicated)
 	FVector Velocity;
 
-	UPROPERTY(Replicated)
-		FVector ReplicatedLocation;
-	UPROPERTY(Replicated)
-		FRotator ReplicatedRotation;
+	UPROPERTY(ReplicatedUsing= OnRep_ReplicatedTransform)
+		FTransform ReplicatedTransform;
+
+	UFUNCTION()
+	void OnRep_ReplicatedTransform();
 
 
 	UFUNCTION(Server, Reliable, WithValidation)
