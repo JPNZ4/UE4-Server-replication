@@ -4,7 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "GoKartMovementComponent.h"
 #include "GoKart.generated.h"
+
+USTRUCT()
+struct FGoKartState
+{
+	GENERATED_BODY();
+
+	UPROPERTY()
+		FGoKartMove LastMove;
+
+	UPROPERTY()
+		FVector Velocity;
+
+	UPROPERTY()
+		FTransform Transform;
+};
 
 UCLASS()
 class KRAZYKARTS_API AGoKart : public APawn
@@ -22,56 +38,22 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	// The mass of car (kg)
-	UPROPERTY(EditAnywhere)
-		float Mass = 1000;
-	// Force applied to car when throttle fully down (N)
-	UPROPERTY(EditAnywhere)
-		float MaxDrivingForce = 10000;
-	// Full lock turning raidus (meters)
-	UPROPERTY(EditAnywhere)
-		float TurningRadius = 10;
-	// Air Coef
-	UPROPERTY(EditAnywhere)
-		float DragCoefficient = 16;
-	// Rolling Coef
-	UPROPERTY(EditAnywhere)
-		float RollingCoefficient = 0.02;
-
-	UPROPERTY(Replicated)
-	float Throttle;
-	UPROPERTY(Replicated)
-	float SteeringThrow;
-
-	UPROPERTY(Replicated)
-	FVector Velocity;
-
-	UPROPERTY(ReplicatedUsing= OnRep_ReplicatedTransform)
-		FTransform ReplicatedTransform;
-
+	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
+		FGoKartState ServerState;
 	UFUNCTION()
-	void OnRep_ReplicatedTransform();
-
-
+		void OnRep_ServerState();
 	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_MoveForward(float Value);
-	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_MoveRight(float Value);
-
+		void Server_SendMove(FGoKartMove Move);
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
-	void ApplyRotation(float DeltaTime);
-	void UpdateLocationFromVelocity(float DeltaTime);
-	FVector GetAirResistance();
-	FVector GetRollingResistance();
-
+	TArray<FGoKartMove> UnacknowledgedMoves;
+	void ClearAcknowledgedMoves(FGoKartMove LastMove);
+	UPROPERTY(EditAnywhere)
+		UGoKartMovementComponent* MovementComponent;
 
 };
