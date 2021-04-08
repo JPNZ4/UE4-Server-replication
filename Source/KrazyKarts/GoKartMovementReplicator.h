@@ -39,6 +39,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	FGoKartMove GetLastMove() { return ServerState.LastMove; };
+
 private:
 	UPROPERTY()
 		UGoKartMovementComponent* MovementComponent;
@@ -51,6 +53,8 @@ private:
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_SendMove(FGoKartMove Move);
 	TArray<FGoKartMove> UnacknowledgedMoves;
+
+	void UpdateServerState(const FGoKartMove& Move);
 
 
 };

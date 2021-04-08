@@ -33,7 +33,6 @@ public:
 	UGoKartMovementComponent();
 
 	void SimulateMove(const FGoKartMove& Move);
-	FGoKartMove CreateMove(float DeltaTime);
 
 	FVector GetAirResistance();
 	FVector GetRollingResistance();
@@ -43,12 +42,14 @@ public:
 	void SetThrottle(float UpdatedThrottle) { Throttle = UpdatedThrottle; };
 	void SetSteeringThrow(float UpdatedSteeringThrow) { SteeringThrow = UpdatedSteeringThrow; };
 
+	FGoKartMove GetLastMove() { return LastMove; };
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
-	
+	FGoKartMove CreateMove(float DeltaTime);
 	void ApplyRotation(float DeltaTime, float MoveSteeringThrow);
 	void UpdateLocationFromVelocity(float DeltaTime);
 
@@ -71,4 +72,5 @@ private:
 	FVector Velocity;
 	float Throttle;
 	float SteeringThrow;
+	FGoKartMove LastMove;
 };
