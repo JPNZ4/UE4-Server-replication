@@ -5,22 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "GoKartMovementComponent.h"
+#include "GoKartMovementReplicator.h"
 #include "GoKart.generated.h"
-
-USTRUCT()
-struct FGoKartState
-{
-	GENERATED_BODY();
-
-	UPROPERTY()
-		FGoKartMove LastMove;
-
-	UPROPERTY()
-		FVector Velocity;
-
-	UPROPERTY()
-		FTransform Transform;
-};
 
 UCLASS()
 class KRAZYKARTS_API AGoKart : public APawn
@@ -41,19 +27,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-private:
-	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
-		FGoKartState ServerState;
-	UFUNCTION()
-		void OnRep_ServerState();
-	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_SendMove(FGoKartMove Move);
+private:	
 	void MoveForward(float Value);
-	void MoveRight(float Value);
-
-	TArray<FGoKartMove> UnacknowledgedMoves;
-	void ClearAcknowledgedMoves(FGoKartMove LastMove);
-	UPROPERTY(EditAnywhere)
+	void MoveRight(float Value);	
+	
+	UPROPERTY(VisibleAnywhere)
 		UGoKartMovementComponent* MovementComponent;
-
+	UPROPERTY(VisibleAnywhere)
+		UGoKartMovementReplicator* MovementReplicator;
 };
