@@ -91,4 +91,6 @@ private:
 		USceneComponent* MeshOffsetRoot;
 	UFUNCTION(BlueprintCallable)
 		void SetMeshOffsetRoot(USceneComponent* Root) { MeshOffsetRoot = Root; }
+
+	float ClientSimulatedTime;
 };
