@@ -86,4 +86,9 @@ private:
 	void InterpolateVelocity(const FHermiteCubicSpline& Spline, float LerpRatio);
 	void InterpolateRotation(float LerpRatio);
 	float VelocityToDerivative();
+
+	UPROPERTY()
+		USceneComponent* MeshOffsetRoot;
+	UFUNCTION(BlueprintCallable)
+		void SetMeshOffsetRoot(USceneComponent* Root) { MeshOffsetRoot = Root; }
 };
